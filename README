@@ -7,9 +7,11 @@ this to work you'll need to have the python module rdflib installed.
 Description:
 
 The crawl.py script will crawl rdf for users and their affiliations on the
-dev8d semantic media wiki. It will also lookup the users twitter profile on
-http://semantictweet.com using the twitter id that was found in the semantic
-media wiki. Just start it up like so:
+dev8d semantic media wiki. It then grabs the rdf for the dev8d programme. 
+After that it will lookup each users twitter profile on 
+http://semantictweet.com using the twitter id that was found in the dev8d wiki.
+Just start it up like so and it'll persist the triples to a on disk berkeleydb
+backed triplestore:
 
   ./crawl.py
 
