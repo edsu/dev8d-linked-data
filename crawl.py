@@ -59,8 +59,7 @@ def fetch_twitter(graph):
             seen.add(twitter_uri)
 
 if __name__ == '__main__':
-    logging.basicConfig(filename="crawl.log", 
-                        level=logging.DEBUG,
+    logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s - %(levelname)s - %(message)s")
     logging.info("starting crawl")
     graph = ConjunctiveGraph('Sleepycat')

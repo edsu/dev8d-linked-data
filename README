@@ -1,0 +1,49 @@
+This little project is a linked-data experiment with data from the
+dev8d semantic media wiki <http://wiki.2010.dev8d.org/>. For any of 
+this to work you'll need to have the python module rdflib installed. 
+
+  http://rdflib.net
+
+Description:
+
+The crawl.py script will crawl rdf for users and their affiliations on the
+dev8d semantic media wiki. It will also lookup the users twitter profile on
+http://semantictweet.com using the twitter id that was found in the semantic
+media wiki. Just start it up like so:
+
+  ./crawl.py
+
+You should be able to rerun crawl.py and it will be able to add, update and
+remove assertions as they are changed on the dev8d wiki.
+
+The dump.py script will dump all the triples as rdf/xml to stdout:
+
+  ./dump.py > dump.rdf
+
+The dump_foaf.py will dump out social network information for dev8d attendees as
+rdf/xml to stdout. This is basically a subset of the full dump that only
+includes assertions about foaf:Person resources:
+
+  ./dump_foaf.py > foaf.rdf
+
+Finally the planet_config.py will use the homepage information pulled from the
+dev8d wiki to locate a users homepage, and then try to autodiscover the feed url
+for their blog. The resulting information is then written to stdout as a
+Planet Venus configuration file for blog aggregation:
+
+  ./planet_config.py > planet.ini
+
+More about Planet Venus can be found at:
+
+  http://intertwingly.net/code/venus/
+
+TODO:
+
+- semantictweet.com only lists first 100 friends (what to do?)
+- maybe pull in descriptions of events from the wiki?
+- maybe persist sydnicated feed urls to the store so they don't have to 
+  be looked up again every time planet_config.py is run?
+
+Author:
+
+Ed Summers <ehs@pobox.com>
