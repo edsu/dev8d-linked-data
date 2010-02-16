@@ -39,6 +39,10 @@ def blogs():
     g.open('store')
     for person, blog in g.subject_objects(predicate=w.Blog):
         name = g.value(subject=person, predicate=w.Name)
+        # unfortunately Ben's feed doesn't have timestamps so it 
+        # always floats to the top of the planet display
+        if name == 'Ben Charlton':
+            continue
         feed_url = discover_feed(blog)
         yield name, feed_url
     g.close()
