@@ -35,6 +35,10 @@ Planet Venus configuration file for blog aggregation:
 
   ./planet_config.py > planet.ini
 
+You can see an example running at:
+
+  http://inkdroid.org/planet-dev8d
+
 More about Planet Venus can be found at:
 
   http://intertwingly.net/code/venus/
@@ -49,3 +53,4 @@ TODO:
 Author:
 
 Ed Summers <ehs@pobox.com>
+
