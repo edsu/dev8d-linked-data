@@ -20,25 +20,24 @@ import feedparser
 setdefaulttimeout(10)
 w = Namespace('http://wiki.2010.dev8d.org/w/Special:URIResolver/Property-3A')
 
-def discover_feed(url):
+def discover_feeds(url):
     logging.info("looking up feed url for %s" % url)
-    feed_url = None
     try:
         html = urlopen(url).read()
         soup = BeautifulSoup(html)
         for link in soup.findAll('link', attrs={'rel': 'alternate'}):
             feed_url = link['href']
+            title = link['title']
             # rewrite to feed to be absolute if its relative
             if feed_url and not feed_url.startswith('http'):
                 u = urlparse(url)
                 feed_url = 'http://%s%s' % (u.netloc, feed_url)
             # check that the feed is there and looks ok
             if feed_ok(feed_url):
-                break
+                yield title, feed_url
     except Exception, e: 
         logging.error("error when performing feed discovery for %s: %s" % 
                       (url, e))
-    return feed_url
 
 def feed_ok(url):
     logging.info("checking feed: %s" % url)
@@ -58,8 +57,13 @@ def blogs():
     g.open('store')
     for person, blog in g.subject_objects(predicate=w.Blog):
         name = g.value(subject=person, predicate=w.Name)
-        feed_url = discover_feed(blog)
-        yield name, feed_url
+        for title, feed_url in discover_feeds(blog):
+            if title:
+                title = "%s (%s)" % (name, title)
+            else: 
+                title = name
+            logging.info("found %s <%s>" % (title, feed_url))
+            yield title, feed_url
     g.close()
 
 def print_config():
@@ -83,7 +87,7 @@ log_level       = DEBUG
 """
     for name, feed in blogs():
         if name and feed:
-            print "[%s]\nname = %s\n\n" % (feed, name)
+            print ("[%s]\nname = %s\n\n" % (feed, name)).encode('utf-8')
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,
