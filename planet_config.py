@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 """
-Queries the triplestore for dev8d people and their blogs and writes out a 
-Venus Planet configuration file.
+Queries the triplestore for dev8d people and their blogs, figures out the 
+feed url for the blog and writes out a Planet Venus configuration file.
 """
 
 from socket import setdefaulttimeout
@@ -15,11 +15,14 @@ from rdflib.graph import ConjunctiveGraph
 from rdflib.namespace import Namespace
 from BeautifulSoup import BeautifulSoup
 
+import feedparser
+
 setdefaulttimeout(10)
 w = Namespace('http://wiki.2010.dev8d.org/w/Special:URIResolver/Property-3A')
 
 def discover_feed(url):
     logging.info("looking up feed url for %s" % url)
+    feed_url = None
     try:
         html = urlopen(url).read()
         soup = BeautifulSoup(html)
@@ -29,20 +32,32 @@ def discover_feed(url):
             if feed_url and not feed_url.startswith('http'):
                 u = urlparse(url)
                 feed_url = 'http://%s%s' % (u.netloc, feed_url)
-            return feed_url
+            # check that the feed is there and looks ok
+            if feed_ok(feed_url):
+                break
     except Exception, e: 
         logging.error("error when performing feed discovery for %s: %s" % 
                       (url, e))
+    return feed_url
+
+def feed_ok(url):
+    logging.info("checking feed: %s" % url)
+    try:
+        feed = feedparser.parse(url)
+        if len(feed.entries) > 0 and not hasattr(feed.entries[0], 'updated'):
+            logging.error("feed %s has entries without updated timestamp" % url)
+            return False
+    except Exception, e:
+        logging.error("error when checking feed %s: %s" % (url, e))
+        return False
+    return True
+
 
 def blogs():
     g = ConjunctiveGraph('Sleepycat')
     g.open('store')
     for person, blog in g.subject_objects(predicate=w.Blog):
         name = g.value(subject=person, predicate=w.Name)
-        # unfortunately Ben's feed doesn't have timestamps so it 
-        # always floats to the top of the planet display
-        if name == 'Ben Charlton':
-            continue
         feed_url = discover_feed(blog)
         yield name, feed_url
     g.close()
