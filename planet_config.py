@@ -74,6 +74,7 @@ def twitter():
         feed_url = "http://twitter.com/statuses/user_timeline/%s.atom" % \
                    twitter_id
         title = "%s (twitter)" % name
+        logging.info("found twitter feed %s <%s>" % (name, feed_url))
         yield title, feed_url
     g.close()
 
