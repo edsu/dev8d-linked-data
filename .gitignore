@@ -1,5 +1,5 @@
 crawl.log
 store
-planet
 *.pyc
 *.log
+planet/cache

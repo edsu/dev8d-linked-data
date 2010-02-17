@@ -66,21 +66,34 @@ def blogs():
             yield title, feed_url
     g.close()
 
+def twitter():
+    g = ConjunctiveGraph('Sleepycat')
+    g.open('store')
+    for person, twitter_id in g.subject_objects(predicate=w.Twitter):
+        name = g.value(subject=person, predicate=w.Name)
+        feed_url = "http://twitter.com/statuses/user_timeline/%s.atom" % \
+                   twitter_id
+        title = "%s (twitter)" % name
+        yield title, feed_url
+    g.close()
+
 def print_config():
     print \
 """
 [Planet]
 
-name            = planet-dev8d
-link            = http://inkdroid.org/planet-dev8d
-owner_name      = Ed Summers
-owner_email     = ehs@pobox.com
-output_theme    = theme
-cache_directory = cache
-output_dir      = /var/www/inkdroid.org/planet-dev8d
-feed_timeout    = 20
-items_per_page  = 60
-log_level       = DEBUG
+name               = planet-dev8d
+link               = http://inkdroid.org/planet-dev8d
+owner_name         = Ed Summers
+owner_email        = ehs@pobox.com
+output_theme       = theme
+cache_directory    = cache
+output_dir         = /var/www/inkdroid.org/planet-dev8d
+feed_timeout       = 20
+items_per_page     = 100 
+log_level          = DEBUG
+filter_directories = filters
+filters            = twitter.py
 
 # Subscription configuration
 
@@ -88,6 +101,9 @@ log_level       = DEBUG
     for name, feed in blogs():
         if name and feed:
             print ("[%s]\nname = %s\n\n" % (feed, name)).encode('utf-8')
+
+    for name, feed in twitter():
+        print ("[%s]\nname = %s\n\n" % (feed, name)).encode('utf-8')
 
 if __name__ == '__main__':
     logging.basicConfig(filename="dev8d.log",
