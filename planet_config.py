@@ -51,7 +51,6 @@ def feed_ok(url):
         return False
     return True
 
-
 def blogs():
     g = ConjunctiveGraph('Sleepycat')
     g.open('store')
@@ -64,18 +63,6 @@ def blogs():
                 title = name
             logging.info("found %s <%s>" % (title, feed_url))
             yield title, feed_url
-    g.close()
-
-def twitter():
-    g = ConjunctiveGraph('Sleepycat')
-    g.open('store')
-    for person, twitter_id in g.subject_objects(predicate=w.Twitter):
-        name = g.value(subject=person, predicate=w.Name)
-        feed_url = "http://twitter.com/statuses/user_timeline/%s.atom" % \
-                   twitter_id
-        title = "%s (twitter)" % name
-        logging.info("found twitter feed %s <%s>" % (name, feed_url))
-        yield title, feed_url
     g.close()
 
 def print_config():
@@ -93,8 +80,6 @@ output_dir         = /var/www/inkdroid.org/planet-dev8d
 feed_timeout       = 20
 items_per_page     = 100 
 log_level          = DEBUG
-filter_directories = filters
-filters            = twitter.py
 
 # Subscription configuration
 
@@ -102,9 +87,6 @@ filters            = twitter.py
     for name, feed in blogs():
         if name and feed:
             print ("[%s]\nname = %s\n\n" % (feed, name)).encode('utf-8')
-
-    for name, feed in twitter():
-        print ("[%s]\nname = %s\n\n" % (feed, name)).encode('utf-8')
 
 if __name__ == '__main__':
     logging.basicConfig(filename="dev8d.log",
