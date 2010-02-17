@@ -90,7 +90,8 @@ log_level       = DEBUG
             print ("[%s]\nname = %s\n\n" % (feed, name)).encode('utf-8')
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO,
+    logging.basicConfig(filename="dev8d.log",
+                        level=logging.INFO,
                         format="%(asctime)s - %(levelname)s - %(message)s")
     logging.info("generating planet config")
     print_config()

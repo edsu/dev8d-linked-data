@@ -2,3 +2,4 @@ crawl.log
 store
 planet
 *.pyc
+*.log
