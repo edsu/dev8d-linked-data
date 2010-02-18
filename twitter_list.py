@@ -51,28 +51,20 @@ def update_list():
             logging.error("unable to get twitter id for %s" % twitter_username)
     g.close()
 
+def twitter_user_id(username, client):
+    """
+    Return a numeric twitter user id for a given twitter screen name
+    """
+    url = 'http://api.twitter.com/1/users/show.json?screen_name=%s' % username
+    resp, content = client.request(url)
+    json = simplejson.loads(content)
+    if json.has_key('id'):
+        return json['id']
+    return None
+
 # complex oauth stuff follows :-)
 # this code was basically pulled from the 3-legged example in the 
 # documentation at: http://github.com/simplegeo/python-oauth2
-
-def get_stored_credentials():
-    config_file = os.path.expanduser('~/.dev8d-twitter')
-    if os.path.isfile(config_file):
-        try:
-            config = open(config_file).read().strip()
-            list_owner, key, secret, token_key, token_secret = config.split(':')
-            return dict(list_owner=list_owner, key=key, secret=secret, 
-                    access_token=oauth.Token(token_key, token_secret))
-        except Exception, e:
-            logging.error(e)
-            pass
-    return None
-
-def save_credentials(list_owner, key, secret, access_token):
-    config = "%s:%s:%s:%s:%s" % (list_owner, key, secret, access_token.key, 
-            access_token.secret)
-    config_file = os.path.expanduser('~/.dev8d-twitter')
-    open(config_file, 'w').write(config)
 
 def get_credentials():
     credentials = get_stored_credentials()
@@ -118,16 +110,25 @@ def get_credentials():
     return dict(list_owner=list_owner, key=key, secret=secret, 
                 access_token=token)
 
-def twitter_user_id(username, client):
-    """
-    Return a numeric twitter user id for a given twitter screen name
-    """
-    url = 'http://api.twitter.com/1/users/show.json?screen_name=%s' % username
-    resp, content = client.request(url)
-    json = simplejson.loads(content)
-    if json.has_key('id'):
-        return json['id']
+def get_stored_credentials():
+    config_file = os.path.expanduser('~/.dev8d-twitter')
+    if os.path.isfile(config_file):
+        try:
+            config = open(config_file).read().strip()
+            list_owner, key, secret, token_key, token_secret = config.split(':')
+            return dict(list_owner=list_owner, key=key, secret=secret, 
+                    access_token=oauth.Token(token_key, token_secret))
+        except Exception, e:
+            logging.error(e)
+            pass
     return None
+
+def save_credentials(list_owner, key, secret, access_token):
+    config = "%s:%s:%s:%s:%s" % (list_owner, key, secret, access_token.key, 
+            access_token.secret)
+    config_file = os.path.expanduser('~/.dev8d-twitter')
+    open(config_file, 'w').write(config)
+
 
 if __name__ == '__main__':
     logging.basicConfig(filename="dev8d.log",
