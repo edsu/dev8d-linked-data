@@ -6,10 +6,10 @@ oauth2 installed. You'll also need to have run crawl.py to populate the triple
 store. 
 
 The first time you run this script you will be asked for some particulars 
-about what username to add the dev8d list under, and various oauth particulars.
-You should be able to add this script as an app at https://twitter.com/apps and
-use the information found on the twitter app page to help configure this
-script for the first time.
+about what username to add the dev8d list under, and various other OAuth 
+particulars. You'll need to visit https://twitter.com/apps login, create a new
+application, and note down the Consumer key and Consumer secret, which 
+you will be promted to enter.
 """
 
 import urllib
