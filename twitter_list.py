@@ -58,9 +58,19 @@ def update_list():
     g.close()
 
 def create_list(username, list_name, client):
-    list_create_url = 'http://api.twitter.com/1/%s/lists.json' % username
-    body = "name=%s" % list_name
-    resp, content = client.request(list_create_url, 'POST', body=body)
+    list_url = 'http://api.twitter.com/1/%s/lists.json' % username
+    resp, content = client.request(list_url)
+    json = simplejson.loads(content)
+
+    list_exists = False
+    for list in json['lists']:
+        if list['name'] == list_name:
+            list_exists = True
+
+    if not list_exists:
+        logging.info("creating list %s" % list_name)
+        body = "name=%s" % list_name
+        resp, content = client.request(list_url, 'POST', body=body)
 
 def twitter_user_id(username, client):
     """
