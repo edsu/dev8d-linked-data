@@ -14,3 +14,6 @@ cd /home/ed/Projects/dev8d-linked-data
 # generate dev8d planet config, and move into place atomically 
 ./planet_config.py > planet/planet.ini.tmp
 mv planet/planet.ini.tmp planet/planet.ini
+
+# update the dev8d twitter list
+./twitter_list.py
