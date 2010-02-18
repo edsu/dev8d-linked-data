@@ -80,7 +80,7 @@ def get_credentials():
         return credentials
 
     # command line driven authorization, which runs the first time you
-    # run this script, before access_tokens and keys are stored in a config
+    # run this script, after which access_tokens and keys are stored in a config
 
     list_owner = raw_input('twitter username to own list: ')
     key = raw_input('twitter key: ')
