@@ -5,11 +5,10 @@ This script will populate a twitter list with dev8d attendees.  You'll need
 oauth2 installed. You'll also need to have run crawl.py to populate the triple 
 store. 
 
-The first time you run this script you will be asked for some particulars 
-about what username to add the dev8d list under, and various other OAuth 
-particulars. You'll need to visit https://twitter.com/apps login, create a new
-application, and note down the Consumer key and Consumer secret, which 
-you will be promted to enter.
+The first time you run this script you will be asked what eusername to add the 
+dev8d list under, and various other OAuth particulars. You'll need to visit 
+https://twitter.com/apps login, create a new application, and note down the 
+Consumer key and Consumer secret, which you will be promted to enter.
 """
 
 import urllib
@@ -37,8 +36,11 @@ def update_list():
     credentials = get_credentials()
     consumer = oauth.Consumer(credentials['key'], credentials['secret'])
     client = oauth.Client(consumer, credentials['access_token'])
-    list_update_url = 'http://api.twitter.com/1/%s/dev8d/members.json' % \
-        credentials['list_owner']
+    list_update_url = 'http://api.twitter.com/1/%s/%s/members.json' % \
+        (credentials['list_owner'], credentials['list_name'])
+
+    # create the list if necessary
+    create_list(credentials['list_owner'], credentials['list_name'], client)
 
     # look at all the twitter usernames and add them to the list
     for twitter_username in g.objects(predicate=w['Twitter']):
@@ -50,6 +52,11 @@ def update_list():
         else:
             logging.error("unable to get twitter id for %s" % twitter_username)
     g.close()
+
+def create_list(username, list_name, client):
+    list_create_url = 'http://api.twitter.com/1/%s/lists.json' % username
+    body = "name=%s"
+    client.request(list_create_url, 'POST', body=body)
 
 def twitter_user_id(username, client):
     """
@@ -75,6 +82,7 @@ def get_credentials():
     # run this script, after which access_tokens and keys are stored in a config
 
     list_owner = raw_input('twitter username to own list: ')
+    list_name = raw_input('name of the list: ')
     key = raw_input('twitter key: ')
     secret = raw_input('secret: ')
     request_token_url = "http://twitter.com/oauth/request_token"
@@ -105,30 +113,30 @@ def get_credentials():
     token = oauth.Token(access_token['oauth_token'], 
             access_token['oauth_token_secret'])
 
-    save_credentials(list_owner, key, secret, token)
+    save_credentials(list_owner, list_name, key, secret, token)
 
-    return dict(list_owner=list_owner, key=key, secret=secret, 
-                access_token=token)
+    return dict(list_owner=list_owner, list_name=list_name, key=key, 
+                secret=secret, access_token=token)
 
 def get_stored_credentials():
     config_file = os.path.expanduser('~/.dev8d-twitter')
     if os.path.isfile(config_file):
         try:
             config = open(config_file).read().strip()
-            list_owner, key, secret, token_key, token_secret = config.split(':')
-            return dict(list_owner=list_owner, key=key, secret=secret, 
-                    access_token=oauth.Token(token_key, token_secret))
+            list_owner, list_name, key, secret, token_key, token_secret = config.split(':')
+            access_token = oauth.Token(token_key, token_secret)
+            return dict(list_owner=list_owner, list_name=list_name, key=key, 
+                    secret=secret, access_token=access_token)
         except Exception, e:
             logging.error(e)
             pass
     return None
 
-def save_credentials(list_owner, key, secret, access_token):
-    config = "%s:%s:%s:%s:%s" % (list_owner, key, secret, access_token.key, 
-            access_token.secret)
+def save_credentials(list_owner, list_name, key, secret, access_token):
+    config = "%s:%s:%s:%s:%s:%s" % (list_owner, list_name, key, secret, 
+            access_token.key, access_token.secret)
     config_file = os.path.expanduser('~/.dev8d-twitter')
     open(config_file, 'w').write(config)
-
 
 if __name__ == '__main__':
     logging.basicConfig(filename="dev8d.log",
