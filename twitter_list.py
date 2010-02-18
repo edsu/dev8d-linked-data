@@ -9,6 +9,10 @@ The first time you run this script you will be asked what eusername to add the
 dev8d list under, and various other OAuth particulars. You'll need to visit 
 https://twitter.com/apps login, create a new application, and note down the 
 Consumer key and Consumer secret, which you will be promted to enter.
+
+TODO: 
+- needs a Client subclass of oauth.Client (too much parameter passing)
+- needs a Config class for working with the configuration information
 """
 
 import urllib
@@ -55,8 +59,8 @@ def update_list():
 
 def create_list(username, list_name, client):
     list_create_url = 'http://api.twitter.com/1/%s/lists.json' % username
-    body = "name=%s"
-    client.request(list_create_url, 'POST', body=body)
+    body = "name=%s" % list_name
+    resp, content = client.request(list_create_url, 'POST', body=body)
 
 def twitter_user_id(username, client):
     """
