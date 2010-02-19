@@ -92,7 +92,7 @@ def print_avatars_html(graph):
         <p id="about">
         This page is <a
         href="http://github.com/edsu/dev8d-linked-data/blob/master/avatars.py">regenerated</a>
-        every two hours based on information stored in the <a
+        every four hours based on information stored in the <a
         href="http://wiki.dev8d.org">dev8d semantic media wiki</a>
         and social graph information in 
         <a href="http://semantictweet.com">semantictweeet</a>. 
