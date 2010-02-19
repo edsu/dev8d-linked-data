@@ -14,8 +14,8 @@ owl  = rdflib.Namespace("http://www.w3.org/2002/07/owl#")
 
 def attendee(graph, person):
     """
-    A hack to use owl:sameAs assertions to take advantage of the owl:sameAs
-    assertion between dev8d wiki users and semantictweet users.
+    A hack to use owl:sameAs assertions created during crawling 
+    to determine if a given user on semantictweet is a dev8d attendee
     """
     for other_uri in graph.subjects(predicate=owl.sameAs, object=person):
         if 'dev8d.org' in other_uri:
@@ -61,7 +61,8 @@ def print_avatars_html(graph):
     </head>
     <body>
         <div id="banner">
-            <h1>dev8d attendees on twitter</h1>
+            <h1><a href="http://dev8d.org">dev8d</a> attendees on 
+            <a href="http://twitter.com/edsu/dev8d">twitter</a></h1>
             <a href="http://www.w3.org/2007/08/pyRdfa/extract?format=turtle&amp;uri=http://inkdroid.org/planet-dev8d/avatars/">
                 <img alt="rdfa" title="get turtle for this page" src="http://www.w3.org/Icons/SW/Buttons/sw-rdfa-gray.png" />
             </a>
