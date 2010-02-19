@@ -2,7 +2,7 @@
 
 cd /home/ed/Projects/dev8d-linked-data
 
-# regenerate dev8d triple store
+# refresh dev8d triple store
 ./crawl.py
 
 # dump rdf for the triple store
@@ -14,6 +14,9 @@ cd /home/ed/Projects/dev8d-linked-data
 # generate dev8d planet config, and move into place atomically 
 ./planet_config.py > planet/planet.ini.tmp
 mv planet/planet.ini.tmp planet/planet.ini
+
+# generate avatars html
+./avatars.py > /var/www/inkdroid.org/planet-dev8d/avatars/index.html
 
 # update the dev8d twitter list
 ./twitter_list.py
