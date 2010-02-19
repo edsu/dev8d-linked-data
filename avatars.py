@@ -93,6 +93,8 @@ def print_avatars_html(graph):
             If you want to show up here add your twitter id to your 
             user profile, see <a href="http://wiki.2010.dev8d.org/w/User:Dfflanders">dfflanders</a> 
             profile for an example.
+        </div>
+        <br />
     </body>
 </html>
 """
