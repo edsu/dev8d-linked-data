@@ -45,6 +45,7 @@ More about Planet Venus can be found at:
 
 TODO:
 
+- danbri suggested using open social api
 - semantictweet.com only lists first 100 friends (what to do?)
 - maybe pull in descriptions of events from the wiki?
 - maybe persist sydnicated feed urls to the store so they don't have to 

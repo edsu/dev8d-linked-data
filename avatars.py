@@ -13,6 +13,10 @@ foaf = rdflib.Namespace("http://xmlns.com/foaf/0.1/")
 owl  = rdflib.Namespace("http://www.w3.org/2002/07/owl#")
 
 def attendee(graph, person):
+    """
+    A hack to use owl:sameAs assertions to take advantage of the owl:sameAs
+    assertion between dev8d wiki users and semantictweet users.
+    """
     for other_uri in graph.subjects(predicate=owl.sameAs, object=person):
         if 'dev8d.org' in other_uri:
             return True
