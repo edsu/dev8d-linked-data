@@ -2,8 +2,8 @@
 
 """
 Messy little hack to print a bunch of twitter avatars for dev8d
-attendees as html. It happens to be rdfa xhtml that includes
-some assertions about who they are.
+attendees as rdfa xhtml using the triples that are crawled from
+semantic media wiki and elsewhere.
 """
 
 import rdflib
