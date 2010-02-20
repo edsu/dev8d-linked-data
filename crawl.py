@@ -4,9 +4,9 @@ import re
 import urllib
 import logging
 
-from rdflib.graph import ConjunctiveGraph
-from rdflib.term import URIRef
-from rdflib.namespace import Namespace
+from rdflib import ConjunctiveGraph
+from rdflib import URIRef
+from rdflib import Namespace
 
 w = Namespace('http://wiki.2010.dev8d.org/w/Special:URIResolver/Property-3A')
 owl = Namespace('http://www.w3.org/2002/07/owl#')

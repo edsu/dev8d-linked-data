@@ -3,14 +3,14 @@
 import sys
 import logging
 
-from rdflib.graph import ConjunctiveGraph
+import rdflib
 
 logging.basicConfig(filename="dev8d.log",
                     level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
 
 logging.info("started dumping store as rdf/xml")
-g = ConjunctiveGraph("Sleepycat")
+g = rdflib.ConjunctiveGraph("Sleepycat")
 g.open('store')
 g.serialize(sys.stdout)
 g.close()

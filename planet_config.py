@@ -11,8 +11,7 @@ from urlparse import urlparse
 
 import logging
 
-from rdflib.graph import ConjunctiveGraph
-from rdflib.namespace import Namespace
+from rdflib import ConjunctiveGraph, Namespace
 from BeautifulSoup import BeautifulSoup
 
 import feedparser
@@ -71,12 +70,12 @@ def print_config():
 [Planet]
 
 name               = planet-dev8d
-link               = http://inkdroid.org/planet-dev8d
+link               = http://inkdroid.org/dev8d/planet/
 owner_name         = Ed Summers
 owner_email        = ehs@pobox.com
 output_theme       = theme
 cache_directory    = cache
-output_dir         = /var/www/inkdroid.org/planet-dev8d
+output_dir         = /var/www/inkdroid.org/dev8d/planet
 feed_timeout       = 20
 items_per_page     = 100 
 log_level          = DEBUG
